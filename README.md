@@ -31,6 +31,7 @@ Clone the repo. Create and activate the virtual environment with python dependen
 ```python
 conda env create --file=environment.yml
 conda activate mcss_demo
+mkdir outputs
 ```
 
 * Download the [ShapenetV2](https://shapenet.org/) dataset by signing up
@@ -41,7 +42,7 @@ on there webpage. This is required ***only*** if you are running the eval scrips
 Extract the zip file and let the path to *full_annotations.json* be `$SCAN2CAD`
 
 * Download the MCSS results from [here](https://cloud.tugraz.at/index.php/s/tR8YbwfF3MykXP6) and extract them to the `outputs`
-folder
+folder.
 Finally, your repo directory should contain the following folder structure:
 ```text
 -MCSS_DEMO
