@@ -110,7 +110,8 @@ retreived models for all categories
 We evaluate precision and recall of detected room corners and the IOU of the
 detected room layout polygons. You can find our refined room layout annotations
 [here](https://files.icg.tugraz.at/f/dbcbed1299e2415a9315/?dl=1) and extract
-the results to `$LAYOUT_LABELS`. Then, you can run the evaluation using the 
+the results to `$LAYOUT_LABELS`. *.json files contain layout polygon instances. Every 
+instance is a list of 3D polygon vertices. Then, you can run the evaluation using the 
 following script:
 
 ```python
