@@ -15,7 +15,7 @@ from LayoutStruct.utils import *
 
 FLAGS = flags.FLAGS
 
-flags.DEFINE_string('annotations_path', '/media/sinisa/Sinisa_hdd_data/Sinisa_Projects/corridor_localisation/Datasets/cvpr_2021_layout_annotations/full_annotations/', 'room layout annotations path')
+flags.DEFINE_string('annotations_path', '/media/sinisa/Sinisa_hdd_data/Sinisa_Projects/corridor_localisation/Datasets/cvpr_2021_layout_annotations/final_annotations/', 'room layout annotations path')
 flags.DEFINE_string('solutions_path', '/home/sinisa/Sinisa_Projects/indoor_localisation/montescene/demo/outputs/scans/', 'path to retrieved layouts')
 
 x=10000
@@ -175,7 +175,7 @@ def get_poly2vert(poly_coords, vert_coords):
 
 def main(argv):
     f = open(
-        "/media/sinisa/Sinisa_hdd_data/Sinisa_Projects/corridor_localisation/Datasets/cvpr_2021_layout_annotations/full_annotations/scenecad_val.txt",
+        "./scannetv2_val.txt",
         "r")
     lines = f.readlines()
     lines.sort()
@@ -191,27 +191,39 @@ def main(argv):
         scene_name = line[:-1]
         decimals = 2
 
-        print("---" + scene_name + "---")
 
         # Invalid scenes
+        if scene_name[-3:] != "_00":
+            continue
         if scene_name in ["scene0077_00", "scene0164_00", "scene0550_00"]:
             continue
 
-        # Ours
+        print("---" + scene_name + "---")
+
+
+        # Load Annotations
+        # --------------------------------------------------------------------------------------------------------------
+
+        annotations_poly_path = os.path.join(FLAGS.annotations_path, "json_dir/", "scene_" + scene_name[5:-3] + ".json")
+        if not os.path.isfile(annotations_poly_path):
+            continue
+
+        # Parse Ours
         # --------------------------------------------------------------------------------------------------------------
         solution_folder = os.path.join(FLAGS.solutions_path, scene_name, "monte_carlo")
         solution_file = os.path.join(solution_folder, "FinalLayout.pickle")
 
         with open(solution_file,
                   'rb') as f:
-            layout_struct = pickle.load(f) # type: LayoutStruct
+            layout_struct = pickle.load(f)  # type: LayoutStruct
 
         finalCandidateList = layout_struct.comp_list
         axis_align_matrix = layout_struct.axis_align_matrix
 
         mcts_poly_coord_list = []
 
-        # finalCandidateList = connect_polys(finalCandidateList)
+        # Parse Annotations
+        # --------------------------------------------------------------------------------------------------------------
 
         for cand in finalCandidateList:
             poly = cand.poly
@@ -229,13 +241,6 @@ def main(argv):
 
         mcts_poly_verts = np.unique(mcts_poly_verts, axis=0)
         mcts_polys = get_poly2vert(mcts_poly_coord_np, mcts_poly_verts)
-
-        # Annotations
-        # --------------------------------------------------------------------------------------------------------------
-
-        annotations_poly_path = os.path.join(FLAGS.annotations_path, "json_dir/", "scene_" + scene_name[5:-3] + ".json")
-        if not os.path.isfile(annotations_poly_path):
-            continue
 
         with open(annotations_poly_path) as f:
             annotations_data = json.load(f)
