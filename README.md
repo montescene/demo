@@ -115,5 +115,5 @@ instance is a list of 3D polygon vertices. Then, you can run the evaluation usin
 following script:
 
 ```python
-python eval.py --annotations_path $LAYOUT_LABELS --solutions_path outputs/scans/
+python eval_layout.py --annotations_path $LAYOUT_LABELS --solutions_path outputs/scans/
 ```
