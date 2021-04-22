@@ -1,7 +1,7 @@
 # Monte-Carlo Scene Search for 3D Scene Understanding (demo)
 
 This repo contains visualization of the scene understanding results from [Monte-Carlo
-Scene Search (MCSS)](https://arxiv.org/abs/2103.07969) method proposed in paper on the ScanNet dataset. MCSS esimates the scene
+Scene Search (MCSS)](https://arxiv.org/abs/2103.07969) method on the ScanNet dataset. MCSS esimates the scene
 layout and retrieves object models and poses from an RGB-D scan of the scene.
 
 <p align="center">
