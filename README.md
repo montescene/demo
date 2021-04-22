@@ -1,7 +1,7 @@
 # Monte-Carlo Scene Search for 3D Scene Understanding (demo)
 
-This repo contains visualization of the scene understanding results from Monte-Carlo
-Scene Search (MCSS) method proposed in [this]() paper on the ScanNet dataset. MCSS esimates the scene
+This repo contains visualization of the scene understanding results from [Monte-Carlo
+Scene Search (MCSS)](https://arxiv.org/abs/2103.07969) method proposed in paper on the ScanNet dataset. MCSS esimates the scene
 layout and retrieves object models and poses from an RGB-D scan of the scene.
 
 <p align="center">
@@ -16,7 +16,7 @@ set of wall and object proposals from this pool by relying on render and compare
 Our method retrieves finer details of complex scene layouts and retrieves objects
 and their poses during cluttered scenarios. Our quantitative evaluation shows
 that MCSS outperforms previous methods for layout estimation and object retrieval
-tasks on ScanNet dataset.
+tasks on the ScanNet dataset.
 
 <p align="center">
  <img width="720" src="assets/mcss_teaser2.png">
@@ -41,7 +41,8 @@ on the website. Extract the models to `$SHAPENET_DIR`
 on there webpage. This is required ***only*** if you are running the eval scrips also.
 Extract the zip file and let the path to *full_annotations.json* be `$SCAN2CAD`
 
-* Download the MCSS results from [here](https://cloud.tugraz.at/index.php/s/tR8YbwfF3MykXP6) and extract them to the `outputs`
+* Download the MCSS results from [here](https://files.icg.tugraz.at/f/3ab82b7d215143cdb1f7/?dl=1
+) and extract them to the `outputs`
 folder.
 Finally, your repo directory should contain the following folder structure:
 ```text
@@ -69,9 +70,10 @@ If you want to visualize the a particular scene provide the scene ID as:
 ```python
 python demo.py --shapenet_dir $SHAPENET_DIR --scene <sceneID>
 ```
-Note that we provide MCSS results on only 126 validation scenes whose scene IDs
-end with '_00'. Further, our method considers 4 main categories of objects,
-namely, chair, table, sofa and bed. Please read the paper for more details.
+Note that we provide MCSS results on only 126 and 64 validation scenes for evaluating objects and 
+room layouts respectively (this is based on Scan2CAD and SceneCAD scenes whose scene IDs
+end with '_00'). Further, our method considers 4 main categories of objects,
+namely: chair, table, sofa and bed. Please read the paper for more details.
 <p align="center">
  <img width="720" src="assets/vis.png">
 </p>
@@ -103,5 +105,14 @@ The following files are important:
 retreived models for all categories
 * s2cChamferDistCat.json - Contains chamfer distance (in mts) of the Scan2CAD
  annotation models for all categories
+ 
+ ## Run MCSS Evaluation for Room Layouts 
+We evaluate precision and recall of detected room corners and the IOU of the
+detected room layout polygons. You can find our refined room layout annotations
+[here](https://files.icg.tugraz.at/f/dbcbed1299e2415a9315/?dl=1) and extract
+the results to `$LAYOUT_LABELS`. Then, you can run the evaluation using the 
+following script:
 
-
+```python
+python eval.py --annotations_path $LAYOUT_LABELS --solutions_path output/scans/
+```
