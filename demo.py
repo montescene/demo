@@ -13,8 +13,8 @@ FLAGS = flags.FLAGS
 
 flags.DEFINE_string('scene', 'scene0000_00', 'scene ID')
 flags.DEFINE_string('shapenet_dir', '/media/shreyas/4aa82be1-14a8-47f7-93a7-171e3ebac2b0/Datasets/ShapeNetCore.v2', 'shapenet dir')
-flags.DEFINE_bool('add_objects', True, 'add objects to the scene')
-flags.DEFINE_bool('add_layout', True, 'add room layout to the scene')
+flags.DEFINE_bool('skip_objects', False, 'skip adding objects to the scene')
+flags.DEFINE_bool('skip_layout', False, 'skip adding room layout to the scene')
 
 def visualize(sceneID, add_objects=True, add_layout=True):
     # Visualize
@@ -68,8 +68,8 @@ def visualize(sceneID, add_objects=True, add_layout=True):
 
 
 def main(argv):
-    add_objects = FLAGS.add_objects
-    add_layout = FLAGS.add_layout
+    add_objects = not FLAGS.skip_objects
+    add_layout = not FLAGS.skip_layout
 
     if FLAGS.scene == 'scene0000_00':
 
