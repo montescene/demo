@@ -114,5 +114,5 @@ the results to `$LAYOUT_LABELS`. Then, you can run the evaluation using the
 following script:
 
 ```python
-python eval.py --annotations_path $LAYOUT_LABELS --solutions_path output/scans/
+python eval.py --annotations_path $LAYOUT_LABELS --solutions_path outputs/scans/
 ```
