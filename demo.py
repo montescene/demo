@@ -23,34 +23,34 @@ def visualize(sceneID, add_objects=True, add_layout=True):
                       visible=True)
     vis.get_render_option().mesh_show_back_face = True
 
+    sceneMesh = o3d.io.read_triangle_mesh(join(SCANS_DIR, sceneID, '%s_vh_clean_2.ply' % (sceneID)))
+    sceneMesh = alignPclMesh(sceneID, sceneMesh)
+    sceneMeshVert = np.array(sceneMesh.vertices)
+    trans = np.zeros((3,)) * 1.0
+    trans[0] = np.max(sceneMeshVert[:, 0]) - np.min(sceneMeshVert[:, 0])
+
+    finalMesh = deepcopy(sceneMesh)
+    layoutObjMeshList = []
     if add_objects:
         mctsObjs = MCTSObjs(sceneID, FLAGS.shapenet_dir)
+        if len(mctsObjs.mctsObjList) == 0:
+            print("WARNING: Objects missing for scene %s" % sceneID)
 
         # Create mesh with Bounding Boxes
         lineGeometryList = []
         geometryList = []
-        for obj in mctsObjs.mctsObjList[0:]:
+        for obj in mctsObjs.mctsObjList:
             geometryList.append(obj.transMesh)
             col = [0, 0, 1]
             lineSets = drawOpen3dCylLines([obj.orientedBB], col)
             lineGeometryList.append(lineSets)
-        finalMesh = deepcopy(mctsObjs.sceneMesh)
+
         for i in range(0, len(geometryList)):
             finalMesh += lineGeometryList[i]
             finalMesh += mctsObjs.mctsObjList[i].transMesh
 
-        objMesh = deepcopy(geometryList[0])
-        for i in range(1, len(geometryList)):
-            objMesh += geometryList[i]
+        layoutObjMeshList = geometryList
 
-
-
-        sceneMeshVert = np.array(mctsObjs.sceneMesh.vertices)
-        trans = np.zeros((3,)) * 1.0
-        trans[0] = np.max(sceneMeshVert[:, 0]) - np.min(sceneMeshVert[:, 0])
-        vis.add_geometry(mctsObjs.sceneMesh)
-        vis.add_geometry(objMesh.translate(trans * 1.1))
-        vis.add_geometry(finalMesh.translate(trans * 1.1 * 2))
 
     if add_layout:
         sceneLayoutPath = os.path.join("outputs/scans/", sceneID, 'monte_carlo/FinalLayout.pickle')
@@ -61,8 +61,17 @@ def visualize(sceneID, add_objects=True, add_layout=True):
                 layout_struct = pickle.load(f) # type: LayoutStruct
 
             wireframe = LayoutStructVis().get_layout_wireframe(layout_struct.comp_list)
+            layoutObjMeshList.append(wireframe)
+            finalMesh += wireframe
 
-            vis.add_geometry(wireframe)
+
+    vis.add_geometry(sceneMesh)
+    if len(layoutObjMeshList) > 0:
+        layoutObjMesh = deepcopy(layoutObjMeshList[0])
+        for i in range(1, len(layoutObjMeshList)):
+            layoutObjMesh += layoutObjMeshList[i]
+        vis.add_geometry(layoutObjMesh.translate(trans * 1.1))
+    vis.add_geometry(finalMesh.translate(trans * 1.1 * 2))
 
     vis.run()
 

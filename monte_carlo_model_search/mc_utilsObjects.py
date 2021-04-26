@@ -114,23 +114,26 @@ class MCTSObjs():
         self.SHAPENETCOREV2_DIR = SHAPENETCOREV2_DIR
         mctsPickleFile = join(SCANS_DIR, sceneID, 'monte_carlo', 'FinalCandidates.pickle')
 
-        with open(mctsPickleFile, 'rb') as f:
-            self.candList = pickle.load(f)
+        if os.path.exists(mctsPickleFile):
+            with open(mctsPickleFile, 'rb') as f:
+                self.candList = pickle.load(f)
 
-        self.sceneID = sceneID
-        self.sceneMesh = o3d.io.read_triangle_mesh(join(SCANS_DIR, sceneID, '%s_vh_clean_2.ply' % (sceneID)))
-        self.sceneMesh = alignPclMesh(sceneID, self.sceneMesh)
+            self.sceneID = sceneID
+            self.sceneMesh = o3d.io.read_triangle_mesh(join(SCANS_DIR, sceneID, '%s_vh_clean_2.ply' % (sceneID)))
+            self.sceneMesh = alignPclMesh(sceneID, self.sceneMesh)
 
-        # self.segMeshMinkNyu = o3d.io.read_point_cloud(join(SEGMENTATIONS_DIR, sceneID, '%s_segmented.ply' % (sceneID)))
-        # self.segMeshMinkNyu = alignPclMesh(sceneID, self.segMeshMinkNyu)
+            # self.segMeshMinkNyu = o3d.io.read_point_cloud(join(SEGMENTATIONS_DIR, sceneID, '%s_segmented.ply' % (sceneID)))
+            # self.segMeshMinkNyu = alignPclMesh(sceneID, self.segMeshMinkNyu)
 
-        if self.sceneID == 'scene0169_00' and False:
-            segmentPclCols = np.array(self.segMeshMinkNyu.colors)
-            segmentPclCols[
-                np.round(segmentPclCols[:, 0] * 255) == nyuName2ID['cabinet']] = nyuName2ID['table'] / 255.
-            self.segMeshMinkNyu.colors = o3d.utility.Vector3dVector(segmentPclCols)
+            if self.sceneID == 'scene0169_00' and False:
+                segmentPclCols = np.array(self.segMeshMinkNyu.colors)
+                segmentPclCols[
+                    np.round(segmentPclCols[:, 0] * 255) == nyuName2ID['cabinet']] = nyuName2ID['table'] / 255.
+                self.segMeshMinkNyu.colors = o3d.utility.Vector3dVector(segmentPclCols)
 
-        self.mctsObjList = self.getMCTSObjs()
+            self.mctsObjList = self.getMCTSObjs()
+        else:
+            self.mctsObjList = []
 
     def getMCTSObjs(self):
         # all objects are in axis aligned coordinate system
