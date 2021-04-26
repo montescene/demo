@@ -117,3 +117,15 @@ following script:
 ```python
 python eval_layouts.py --annotations_path $LAYOUT_LABELS --solutions_path outputs/scans/
 ```
+
+# Citation
+If you found this work useful for your publication, please consider citing us:
+
+```
+@INPROCEEDINGS{mcss2021,
+title={Monte Carlo Scene Search for 3D Scene Understanding},
+author={Shreyas Hampali and Sinisa Stekovic and Sayan Deb Sarkar and Chetan Srinivasa Kumar and Friedrich Fraundorfer and Vincent Lepetit},
+booktitle = {CVPR},
+year = {2021}
+}
+```
