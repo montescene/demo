@@ -5,7 +5,7 @@ Scene Search (MCSS)](https://arxiv.org/abs/2103.07969) method on the ScanNet dat
 layout and retrieves object models and poses from an RGB-D scan of the scene.
 
 <p align="center">
- <img width="720" src="assets/mcss_teaser1.gif">
+ <img width="720" src="assets/teaser_big2.gif">
 </p>
 
 The MCSS method uses Monte-Carlo Tree Search (MCTS) to optimally select a set of
